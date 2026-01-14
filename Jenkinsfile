@@ -6,7 +6,7 @@ stages {
         steps {
             echo "Pulling source code from GitHub..."
             // This 'git' step is provided by the Git Plugin
-            git url: '', branch: 'main'
+            git url: 'https://github.com/atharvsakolkar2025/myawsproject.git', branch: 'main'
         }
     }
 
