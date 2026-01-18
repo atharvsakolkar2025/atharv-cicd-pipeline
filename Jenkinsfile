@@ -1,36 +1,27 @@
 pipeline {
-    agent any
-stages {
-    // NEW STAGE: Pull the source code first!
-    stage('pull SCM') {
-        steps {
-            echo "Pulling source code from GitHub..."
-            // This 'git' step is provided by the Git Plugin
-            git url: 'https://github.com/atharvsakolkar2025/myawsproject.git', branch: 'main'
-        }
-    }
+ agent-1
 
-    stage('my Build') {
-        steps {
-            // Let's run a real command now that we have the code
-            // 'sh' is a step for running a shell command on Linux/macOS
-            sh 'ls -l'
-            sh 'pwd'
-            echo "In a real build, we'd run 'mvn clean install'."
+ stages {
+     stage('Fetch code') {
+            steps {
+               git branch: 'atom', url: 'https://github.com/hkhcoder/vprofile-project.git'
+            }
+     }
+       stage('UNIT TEST') {
+            steps{
+                sh 'mvn test'
+            }
         }
-    }
-
-    stage('cbz Test') {
-        steps {
-            sh 'hostnamectl'
-            echo "Running tests..."
-        }
-    }
-
-    stage('Deploy to productionn') {
-        steps {
-            echo "Deploying to staging..."
-        }
-    }
-}
+     stage('Build'){
+         steps{
+            sh 'mvn package'
+         }
+         post {
+            success {
+               echo 'Now Archiving it...'
+               archiveArtifacts artifacts: '**/target/*.war'
+            }
+         }
+     }     
+ }
 }
